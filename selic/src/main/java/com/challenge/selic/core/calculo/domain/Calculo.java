@@ -66,7 +66,7 @@ public class Calculo extends AbstractDomainEvent {
 
     private void validarEntradaValorProduto(){
         if (this.valorProduto <= this.valorEntrada) {
-            throw new CalculoValorEntradaMaiorIgualQueValorProdutoConstraintException(); //produto pode ser pago a vista.
+            throw new CalculoValorEntradaMaiorIgualQueValorProdutoConstraintException("produto pode ser pago  vista"); //produto pode ser pago a vista.
         }
     }
 }
