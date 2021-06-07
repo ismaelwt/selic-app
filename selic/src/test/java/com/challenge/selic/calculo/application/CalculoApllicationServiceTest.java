@@ -3,7 +3,7 @@ package com.challenge.selic.calculo.application;
 import com.challenge.selic.config.AdapterConfig;
 import com.challenge.selic.core.calculo.application.CalculoApplicationService;
 import com.challenge.selic.core.calculo.application.command.CalcularJuroCommand;
-import com.challenge.selic.core.calculo.dominio.event.CalculoExecutadoEvent;
+import com.challenge.selic.core.calculo.domain.event.CalculoExecutadoEvent;
 import com.challenge.selic.util.TestUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

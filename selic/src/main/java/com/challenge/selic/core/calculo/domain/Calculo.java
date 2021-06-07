@@ -1,7 +1,6 @@
-package com.challenge.selic.core.calculo.dominio;
+package com.challenge.selic.core.calculo.domain;
 
-import com.challenge.selic.core.calculo.application.command.CalcularJuroCommand;
-import com.challenge.selic.core.calculo.dominio.event.CalculoExecutadoEvent;
+import com.challenge.selic.core.calculo.domain.event.CalculoExecutadoEvent;
 import com.challenge.selic.core.calculo.exception.CalculoValorEntradaMaiorIgualQueValorProdutoConstraintException;
 import com.challenge.selic.core.calculo.repository.SelicTableClient;
 import com.challenge.selic.util.AbstractDomainEvent;

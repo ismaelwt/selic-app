@@ -5,7 +5,7 @@ import com.challenge.selic.core.calculo.api.CalculoController;
 import com.challenge.selic.core.calculo.api.TaxaSelicController;
 import com.challenge.selic.core.calculo.api.dto.CalcularJuroDTO;
 import com.challenge.selic.core.calculo.application.command.CalcularJuroCommand;
-import com.challenge.selic.core.calculo.dominio.Calculo;
+import com.challenge.selic.core.calculo.domain.Calculo;
 import com.challenge.selic.core.calculo.repository.SelicTableClient;
 import com.challenge.selic.util.Utils;
 import org.junit.jupiter.api.DisplayName;

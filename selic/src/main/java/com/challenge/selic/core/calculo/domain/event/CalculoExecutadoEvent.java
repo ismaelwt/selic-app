@@ -1,8 +1,7 @@
-package com.challenge.selic.core.calculo.dominio.event;
+package com.challenge.selic.core.calculo.domain.event;
 
-import com.challenge.selic.core.calculo.dominio.Calculo;
+import com.challenge.selic.core.calculo.domain.Calculo;
 import com.challenge.selic.core.calculo.repository.SelicTableClient;
-import com.challenge.selic.util.AbstractDomainEvent;
 import com.challenge.selic.util.DomainEvent;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

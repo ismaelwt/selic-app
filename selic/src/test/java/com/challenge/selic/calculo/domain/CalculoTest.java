@@ -1,8 +1,8 @@
 package com.challenge.selic.calculo.domain;
 
 import com.challenge.selic.core.calculo.api.dto.ListaParcelaDTO;
-import com.challenge.selic.core.calculo.dominio.Calculo;
-import com.challenge.selic.core.calculo.dominio.event.CalculoExecutadoEvent;
+import com.challenge.selic.core.calculo.domain.Calculo;
+import com.challenge.selic.core.calculo.domain.event.CalculoExecutadoEvent;
 import com.challenge.selic.core.calculo.exception.CalculoValorEntradaMaiorIgualQueValorProdutoConstraintException;
 import com.challenge.selic.core.calculo.repository.SelicTableClient;
 import com.challenge.selic.util.TestUtils;
