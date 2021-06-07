@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SelicTableClient.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">selic</a> &gt; <a href="index.source.html" class="el_package">com.challenge.selic.core.calculo.repository</a> &gt; <span class="el_source">SelicTableClient.java</span></div><h1>SelicTableClient.java</h1><pre class="source lang-java linenums">package com.challenge.selic.core.calculo.repository;
+
+import com.challenge.selic.util.Utils;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.google.gson.Gson;
+import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+
+import static com.challenge.selic.util.Utils.formatDate;
+
+@Component
+<span class="fc" id="L21">public class SelicTableClient {</span>
+
+    public static Set&lt;SelicObject&gt; fetch() {
+<span class="fc" id="L24">        RestTemplate template = new RestTemplate();</span>
+<span class="fc" id="L25">        return Set.of(new Gson().fromJson( template.getForObject(&quot;https://api.bcb.gov.br/dados/serie/bcdata.sgs.11/dados?formato=json&quot;, String.class), SelicObject[].class));</span>
+    }
+
+    @Getter
+<span class="pc" id="L29">    @Builder</span>
+    @JsonDeserialize(builder = SelicObject.SelicObjectBuilder.class)
+    public static class SelicObject {
+        private String data;
+<span class="fc" id="L33">        private String valor;</span>
+
+        public String getData() {
+<span class="fc" id="L36">            return formatDate(this.data, &quot;dd/mm/yyyy&quot;, &quot;yyyy-mm-dd&quot;);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

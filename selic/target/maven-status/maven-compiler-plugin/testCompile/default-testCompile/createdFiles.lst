@@ -1,0 +1,6 @@
+com\challenge\selic\util\TestUtils.class
+com\challenge\selic\calculo\domain\CalculoTest.class
+com\challenge\selic\calculo\api\CalculoAPITest.class
+com\challenge\selic\calculo\application\CalculoApllicationServiceTest.class
+com\challenge\selic\config\AdapterConfig.class
+com\challenge\selic\config\Config.class

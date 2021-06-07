@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Calculo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">selic</a> &gt; <a href="index.source.html" class="el_package">com.challenge.selic.core.calculo.dominio</a> &gt; <span class="el_source">Calculo.java</span></div><h1>Calculo.java</h1><pre class="source lang-java linenums">package com.challenge.selic.core.calculo.dominio;
+
+import com.challenge.selic.core.calculo.application.command.CalcularJuroCommand;
+import com.challenge.selic.core.calculo.dominio.event.CalculoExecutadoEvent;
+import com.challenge.selic.core.calculo.exception.CalculoValorEntradaMaiorIgualQueValorProdutoConstraintException;
+import com.challenge.selic.core.calculo.repository.SelicTableClient;
+import com.challenge.selic.util.AbstractDomainEvent;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NonNull;
+
+<span class="nc bnc" id="L12" title="All 70 branches missed.">@Data</span>
+public class Calculo extends AbstractDomainEvent {
+
+<span class="fc" id="L15">    private Double valorProduto;</span>
+<span class="fc" id="L16">    private Double valorEntrada;</span>
+<span class="fc" id="L17">    private Integer qtdParcelas;</span>
+<span class="fc" id="L18">    private SelicTableClient.SelicObject taxaSelic;</span>
+
+<span class="fc" id="L20">    private Double valorComJuros;</span>
+<span class="fc" id="L21">    private Double juros;</span>
+<span class="fc" id="L22">    private Double valorSemJuros;</span>
+<span class="fc" id="L23">    private Double taxaJurosAoMes;</span>
+
+<span class="pc bfc" id="L25" title="All 6 branches covered.">    @Builder</span>
+<span class="fc bfc" id="L26" title="All 6 branches covered.">    public Calculo(@NonNull Double valorProduto, @NonNull Double valorEntrada, @NonNull Integer qtdParcelas, SelicTableClient.SelicObject taxaSelic) {</span>
+
+<span class="fc" id="L28">        this.valorProduto = valorProduto;</span>
+<span class="fc" id="L29">        this.valorEntrada = valorEntrada;</span>
+<span class="fc" id="L30">        this.qtdParcelas = qtdParcelas;</span>
+<span class="fc" id="L31">        this.taxaSelic = taxaSelic;</span>
+<span class="fc" id="L32">    }</span>
+
+    public Calculo calcularJurosSelic(){
+
+<span class="fc" id="L36">        this.validarEntradaValorProduto();</span>
+
+<span class="fc" id="L38">        var taxa = ( 1 + Double.parseDouble(taxaSelic.getValor()) * this.qtdParcelas);</span>
+
+<span class="fc" id="L40">        var totalComJuros = (this.valorProduto - this.valorEntrada) * taxa;</span>
+
+<span class="fc" id="L42">        var juros = (this.valorProduto -  this.valorEntrada) * Double.parseDouble(taxaSelic.getValor()) * this.qtdParcelas;</span>
+
+<span class="fc" id="L44">        this.valorComJuros = (totalComJuros / this.qtdParcelas);</span>
+<span class="fc" id="L45">        this.valorSemJuros = ( (this.valorProduto - this.valorEntrada) / this.qtdParcelas);</span>
+<span class="fc" id="L46">        this.taxaJurosAoMes = taxa;</span>
+<span class="fc" id="L47">        this.juros = (juros / this.qtdParcelas);</span>
+
+<span class="fc" id="L49">        this.registerEvent(CalculoExecutadoEvent.from(this));</span>
+
+<span class="fc" id="L51">        return this;</span>
+    }
+
+    public Calculo calcularSemJuros(){
+
+<span class="fc" id="L56">        this.validarEntradaValorProduto();</span>
+
+<span class="fc" id="L58">        this.valorComJuros = null;</span>
+<span class="fc" id="L59">        this.valorSemJuros = (this.valorProduto / this.qtdParcelas);</span>
+<span class="fc" id="L60">        this.taxaJurosAoMes = null;</span>
+<span class="fc" id="L61">        this.juros = null;</span>
+
+<span class="fc" id="L63">        this.registerEvent(CalculoExecutadoEvent.from(this));</span>
+
+<span class="fc" id="L65">        return this;</span>
+    }
+
+    private void validarEntradaValorProduto(){
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        if (this.valorProduto &lt;= this.valorEntrada) {</span>
+<span class="fc" id="L70">            throw new CalculoValorEntradaMaiorIgualQueValorProdutoConstraintException(); //produto pode ser pago a vista.</span>
+        }
+<span class="fc" id="L72">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

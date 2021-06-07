@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CalculoController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">selic</a> &gt; <a href="index.source.html" class="el_package">com.challenge.selic.core.calculo.api</a> &gt; <span class="el_source">CalculoController.java</span></div><h1>CalculoController.java</h1><pre class="source lang-java linenums">package com.challenge.selic.core.calculo.api;
+
+import com.challenge.selic.core.calculo.api.dto.CalcularJuroDTO;
+import com.challenge.selic.core.calculo.api.dto.ListaParcelaDTO;
+import com.challenge.selic.core.calculo.application.CalculoApplicationService;
+import com.challenge.selic.core.calculo.application.command.CalcularJuroCommand;
+import com.challenge.selic.core.calculo.exception.CalculoConstraintException;
+import com.challenge.selic.util.Utils;
+import com.challenge.selic.util.ValidateService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.stream.Collectors;
+
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
+@CrossOrigin
+<span class="fc" id="L26">@AllArgsConstructor</span>
+@RestController
+@RequestMapping(path = CalculoController.PATH, produces = APPLICATION_JSON_VALUE)
+public class CalculoController {
+
+    public static final String PATH = &quot;api/v1/calcularJuros&quot;;
+
+    @Autowired
+    private final ValidateService validateService;
+
+    @Autowired
+    private final CalculoApplicationService calculoService;
+
+    @PostMapping
+    @ApiOperation(value = &quot;Recebe um produto e condição de pagamento para a realização de um cálculo da taxa selic.&quot;, httpMethod = &quot;POST&quot;, consumes = APPLICATION_JSON_VALUE)
+    @ApiResponses(value = {@ApiResponse(code = 201, message = &quot;cálculo realizado com sucesso&quot;), @ApiResponse(code = 400, message = &quot;o cálculo falhou&quot;)})
+    public Collection&lt;ListaParcelaDTO&gt; create(@RequestBody CalcularJuroDTO dto) {
+
+<span class="fc" id="L44">        this.validateService.validate(dto).ifPresent(violations -&gt; {</span>
+<span class="fc" id="L45">            throw new CalculoConstraintException(violations);</span>
+        });
+
+<span class="fc" id="L48">        var produto = CalcularJuroCommand.ProdutoCmd.builder()</span>
+<span class="fc" id="L49">                .nome(dto.getProduto().getNome())</span>
+<span class="fc" id="L50">                .codigo(dto.getProduto().getCodigo())</span>
+<span class="fc" id="L51">                .valor(dto.getProduto().getValor())</span>
+<span class="fc" id="L52">                .build();</span>
+
+<span class="fc" id="L54">        var condicaoPagamento = CalcularJuroCommand.CondicaoPagamentoCmd.of(dto.getCondicaoPagamento().getValorEntrada(), dto.getCondicaoPagamento().getQuantidadeParcelas());</span>
+
+<span class="fc" id="L56">        var cmd = CalcularJuroCommand.builder()</span>
+<span class="fc" id="L57">                .produto(produto)</span>
+<span class="fc" id="L58">                .condicaoPagamento(condicaoPagamento)</span>
+<span class="fc" id="L59">                .build();</span>
+
+<span class="fc" id="L61">        var calculo = calculoService.handle(cmd);</span>
+
+<span class="fc" id="L63">        var resultSet = new ArrayList&lt;ListaParcelaDTO&gt;();</span>
+
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        for (int i = 0; i &lt; cmd.getCondicaoPagamento().getQuantidadeParcelas(); i++) {</span>
+
+
+<span class="fc" id="L68">            resultSet.add(ListaParcelaDTO.builder().numeroParcela(i + 1)</span>
+<span class="fc" id="L69">                    .taxaJurosAoMes(Utils.format(calculo.getTaxaJurosAoMes()))</span>
+<span class="fc" id="L70">                    .valorComJuros(Utils.format(calculo.getValorComJuros()))</span>
+<span class="fc" id="L71">                    .valorSemJuros(Utils.format(calculo.getValorSemJuros()))</span>
+<span class="fc" id="L72">                    .valorTaxaJurosAoMes(Utils.format(calculo.getJuros()))</span>
+<span class="fc" id="L73">                    .build());</span>
+
+        }
+
+<span class="fc" id="L77">        return resultSet;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
