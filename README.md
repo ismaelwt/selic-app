@@ -1,4 +1,4 @@
-# API spring boot para calcular a de juros baseada na taxa selic.
+# API spring para calcular a de juros baseada na taxa selic.
 
 mvn clean install -U
 
